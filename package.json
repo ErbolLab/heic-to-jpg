@@ -1,0 +1,24 @@
+{
+  "name": "heic-to-jpg",
+  "version": "1.0.0",
+  "description": "Example of converting HEIC to JPEG",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.16.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Erbolking/heic-to-jpg.git"
+  },
+  "author": "Erick Aky",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Erbolking/heic-to-jpg/issues"
+  },
+  "homepage": "https://github.com/Erbolking/heic-to-jpg#readme"
+}

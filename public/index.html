@@ -1,0 +1,50 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Example of converting HEIC to JPEG">
+  <meta name="keywords" content="HEIC to JPEG, render HEIC on canvas">
+  <title>Example of converting HEIC to JPEG</title>
+  <script src="js/libde265-selector.js"></script>
+  <script src="js/heif-api.js"></script>
+  <script src="js/hevc-decoder.js"></script>
+  <script src="js/image-provider.js"></script>
+</head>
+<body id="body">
+<img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" id="image">
+<script>
+  var canvas = document.createElement('canvas');
+  var ctx = canvas.getContext('2d');
+  var image = document.getElementById('image');
+  var reader = new HEIFReader('content/winter_1440x960.heic');
+  var imageProvider = new ImageProvider(reader, new HevcDecoder());
+
+  reader.requestFileInfo(function (fileInfo) {
+    var masterContextId = imageProvider.getMasterContextId(fileInfo);
+    var masterIds = imageProvider.getMasterIds(fileInfo);
+    var displayWidth = imageProvider.getDisplayWidth(fileInfo, masterContextId);
+    var displayHeight = imageProvider.getDisplayHeight(fileInfo, masterContextId);
+    var coverImage = masterIds[0];
+
+    imageProvider.requestImageData(masterContextId, [coverImage], function (payload) {
+      var frame = payload.frames[0];
+      var width = frame.width;
+      var height = frame.height;
+      var data = frame.canvasFrameData;
+      var imageData = ctx.createImageData(width, height);
+
+      imageData.data.set(data);
+
+      canvas.width = displayWidth;
+      canvas.height = displayHeight;
+      ctx.putImageData(imageData, 0, 0);
+      canvas.toBlob(function (blob) {
+        url = URL.createObjectURL(blob);
+        image.src = url;
+      });
+    });
+  })
+</script>
+</body>
+</html>
